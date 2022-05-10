@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity 0.8.10;
+pragma solidity 0.8.12;
 
-import {ILendingPool} from "./interfaces/ILendingPool.sol";
+import {ILendingPool} from "./external/aave/ILendingPool.sol";
 
 /// @title <TITLE>
 /// @author <AUTHOR>

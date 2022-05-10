@@ -1,28 +1,28 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity 0.8.10;
-pragma abicoder v2;
+pragma solidity ^0.8.12;
 
 // testing libraries
-import "ds-test/test.sol";
-import "forge-std/console.sol";
-import {stdCheats} from "forge-std/stdlib.sol";
+import "@ds/test.sol";
+import "@std/console.sol";
+import {stdCheats} from "@std/stdlib.sol";
+import {Vm} from "@std/Vm.sol";
+import {DSTestPlus} from "@solmate/test/utils/DSTestPlus.sol";
 
 // contract dependencies
-import "./interfaces/Vm.sol";
-import "../interfaces/IAaveGovernanceV2.sol";
-import "../interfaces/IExecutorWithTimelock.sol";
+import "../external/aave/IAaveGovernanceV2.sol";
+import "../external/aave/IExecutorWithTimelock.sol";
 import "../ProposalPayload.sol";
 
-contract ProposalPayloadTest is DSTest, stdCheats {
-    Vm vm = Vm(HEVM_ADDRESS);
+contract ProposalPayloadTest is DSTestPlus, stdCheats {
+    Vm private vm = Vm(HEVM_ADDRESS);
 
-    address aaveTokenAddress = 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9;
+    address private aaveTokenAddress = 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9;
 
-    address aaveGovernanceAddress = 0xEC568fffba86c094cf06b22134B23074DFE2252c;
-    address aaveGovernanceShortExecutor = 0xEE56e2B3D491590B5b31738cC34d5232F378a8D5;
+    address private aaveGovernanceAddress = 0xEC568fffba86c094cf06b22134B23074DFE2252c;
+    address private aaveGovernanceShortExecutor = 0xEE56e2B3D491590B5b31738cC34d5232F378a8D5;
 
-    IAaveGovernanceV2 aaveGovernanceV2 = IAaveGovernanceV2(aaveGovernanceAddress);
-    IExecutorWithTimelock shortExecutor = IExecutorWithTimelock(aaveGovernanceShortExecutor);
+    IAaveGovernanceV2 private aaveGovernanceV2 = IAaveGovernanceV2(aaveGovernanceAddress);
+    IExecutorWithTimelock private shortExecutor = IExecutorWithTimelock(aaveGovernanceShortExecutor);
 
     address[] private aaveWhales;
 
@@ -37,7 +37,7 @@ contract ProposalPayloadTest is DSTest, stdCheats {
     bool[] private withDelegatecalls;
     bytes32 private ipfsHash = 0x0;
 
-    uint256 proposalId;
+    uint256 private proposalId;
 
     function setUp() public {
         // aave whales may need to be updated based on the block being used

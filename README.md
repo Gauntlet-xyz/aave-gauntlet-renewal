@@ -11,13 +11,13 @@ A template for creating AAVE governance Proposal payload contracts.
 $ forge init --template https://github.com/llama-community/aave-governance-forge-template my-repo
 $ cd my-repo
 $ forge install
+$ npm install
 ```
 
 ## Tests
 
 ```
-$ make test # run tests without traces
-$ make trace # run tests with traces
+$ make test
 ```
 
 ## Acknowledgements
