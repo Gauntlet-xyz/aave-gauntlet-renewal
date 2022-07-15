@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+if [ ! -f ../.env ]
+then
+  export $(cat .env | xargs)
+fi
 
 # Read the RPC URL
 echo Enter the mainnet RPC URL to fork a local hardhat node from:
