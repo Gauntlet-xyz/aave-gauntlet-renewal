@@ -1,45 +1,27 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.0;
 
 // testing libraries
-import "@ds/test.sol";
-import "@std/console.sol";
-import {stdCheats} from "@std/stdlib.sol";
-import {Vm} from "@std/Vm.sol";
-import {DSTestPlus} from "@solmate/test/utils/DSTestPlus.sol";
+import "@forge-std/Test.sol";
 
 // contract dependencies
-import "../external/aave/IAaveGovernanceV2.sol";
-import "../external/aave/IExecutorWithTimelock.sol";
-import "../ProposalPayload.sol";
+import {IAaveGovernanceV2} from "../external/aave/IAaveGovernanceV2.sol";
+import {ProposalPayload} from "../ProposalPayload.sol";
+import {DeployMainnetProposal} from "../../script/DeployMainnetProposal.s.sol";
 
-contract ProposalPayloadTest is DSTestPlus, stdCheats {
-    Vm private vm = Vm(HEVM_ADDRESS);
-
-    address private aaveTokenAddress = 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9;
-
-    address private aaveGovernanceAddress = 0xEC568fffba86c094cf06b22134B23074DFE2252c;
-    address private aaveGovernanceShortExecutor = 0xEE56e2B3D491590B5b31738cC34d5232F378a8D5;
-
-    IAaveGovernanceV2 private aaveGovernanceV2 = IAaveGovernanceV2(aaveGovernanceAddress);
-    IExecutorWithTimelock private shortExecutor = IExecutorWithTimelock(aaveGovernanceShortExecutor);
+contract ProposalPayloadTest is Test {
+    IAaveGovernanceV2 private aaveGovernanceV2 = IAaveGovernanceV2(0xEC568fffba86c094cf06b22134B23074DFE2252c);
 
     address[] private aaveWhales;
 
     address private proposalPayloadAddress;
-    address private tokenDistributorAddress;
-    address private ecosystemReserveAddress;
-
-    address[] private targets;
-    uint256[] private values;
-    string[] private signatures;
-    bytes[] private calldatas;
-    bool[] private withDelegatecalls;
-    bytes32 private ipfsHash = 0x0;
 
     uint256 private proposalId;
 
     function setUp() public {
+        // To fork at a specific block: vm.createSelectFork(vm.rpcUrl("mainnet", BLOCK_NUMBER));
+        vm.createSelectFork(vm.rpcUrl("mainnet"));
+
         // aave whales may need to be updated based on the block being used
         // these are sometimes exchange accounts or whale who move their funds
 
@@ -57,6 +39,14 @@ contract ProposalPayloadTest is DSTestPlus, stdCheats {
         _skipVotingPeriod();
         _queueProposal();
         _skipQueuePeriod();
+    }
+
+    function testSetup() public {
+        IAaveGovernanceV2.ProposalWithoutVotes memory proposal = aaveGovernanceV2.getProposalById(proposalId);
+        assertEq(proposalPayloadAddress, proposal.targets[0], "TARGET_IS_NOT_PAYLOAD");
+
+        IAaveGovernanceV2.ProposalState state = aaveGovernanceV2.getProposalState(proposalId);
+        assertEq(uint256(state), uint256(IAaveGovernanceV2.ProposalState.Queued), "PROPOSAL_NOT_IN_EXPECTED_STATE");
     }
 
     function testExecute() public {
@@ -79,24 +69,14 @@ contract ProposalPayloadTest is DSTestPlus, stdCheats {
     /*******************************************************************************/
 
     function _createProposal() public {
-        // Uncomment to deploy new implementation contracts for testing
-        // tokenDistributorAddress = deployCode("TokenDistributor.sol:TokenDistributor");
-        // ecosystemReserveAddress = deployCode("AaveEcosystemReserve.sol:AaveEcosystemReserve");
-
         ProposalPayload proposalPayload = new ProposalPayload();
         proposalPayloadAddress = address(proposalPayload);
 
-        bytes memory emptyBytes;
-
-        targets.push(proposalPayloadAddress);
-        values.push(0);
-        signatures.push("execute()");
-        calldatas.push(emptyBytes);
-        withDelegatecalls.push(true);
-
         vm.prank(aaveWhales[0]);
-        aaveGovernanceV2.create(shortExecutor, targets, values, signatures, calldatas, withDelegatecalls, ipfsHash);
-        proposalId = aaveGovernanceV2.getProposalsCount() - 1;
+        proposalId = DeployMainnetProposal._deployMainnetProposal(
+            proposalPayloadAddress,
+            0x344d3181f08b3186228b93bac0005a3a961238164b8b06cbb5f0428a9180b8a7 // TODO: Replace with actual IPFS Hash
+        );
     }
 
     /*******************************************************************************/
@@ -124,13 +104,5 @@ contract ProposalPayloadTest is DSTestPlus, stdCheats {
     function _skipQueuePeriod() public {
         IAaveGovernanceV2.ProposalWithoutVotes memory proposal = aaveGovernanceV2.getProposalById(proposalId);
         vm.warp(proposal.executionTime + 1);
-    }
-
-    function testSetup() public {
-        IAaveGovernanceV2.ProposalWithoutVotes memory proposal = aaveGovernanceV2.getProposalById(proposalId);
-        assertEq(proposalPayloadAddress, proposal.targets[0], "TARGET_IS_NOT_PAYLOAD");
-
-        IAaveGovernanceV2.ProposalState state = aaveGovernanceV2.getProposalState(proposalId);
-        assertEq(uint256(state), uint256(IAaveGovernanceV2.ProposalState.Queued), "PROPOSAL_NOT_IN_EXPECTED_STATE");
     }
 }
