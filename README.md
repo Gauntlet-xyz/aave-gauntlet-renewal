@@ -52,7 +52,3 @@ Duplicate `.env.example` and rename to `.env`:
 - `make deploy-proposal`- deploy proposal on mainnet
 
 To confirm the deploy was successful, re-run your test suite but use the newly created contract address.
-
-## Acknowledgements
-
-- [Steven Valeri](https://github.com/stevenvaleri/): Re-wrote AAVE's governance process tests in solidity.
