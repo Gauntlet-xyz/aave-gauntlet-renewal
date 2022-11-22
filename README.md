@@ -1,31 +1,25 @@
-# AAVE Governance Forge Template
+# Gauntlet <> AAVE Renewal Proposal
 
-A template for creating AAVE governance Proposal payload contracts.
+Payload and tests for the Gauntlet <> AAVE Renewal Propsal
+
+## Specification
+
+- Payload
+- Tests
+- Proposal
+
+## Payload Specification
+
+The Proposal Payload does the following:
+
+* 30% of the total annual fee ($772,417 in USDC) will be deposited in a vault for the insolvency refund.
+* The remaining $1,029,888 in aUSDC and 9,753 AAVE tokens will be streamed linearly over 1 year from the ecosystem reserve.
 
 ## Installation
 
 It requires [Foundry](https://github.com/gakonst/foundry) installed to run. You can find instructions here [Foundry installation](https://github.com/gakonst/foundry#installation).
 
-### GitHub template
-
-It's easiest to start a new project by clicking the ["Use this template"](https://github.com/llama-community/aave-governance-forge-template).
-
-Then clone the templated repository locally and `cd` into it and run the following commands:
-
 ```sh
-$ npm install
-$ forge install
-$ forge update
-$ git submodule update --init --recursive
-```
-
-### Manual installation
-
-If you want to create your project manually, run the following commands:
-
-```sh
-$ forge init --template https://github.com/llama-community/aave-governance-forge-template <my-repo>
-$ cd <my-repo>
 $ npm install
 $ forge install
 $ forge update
