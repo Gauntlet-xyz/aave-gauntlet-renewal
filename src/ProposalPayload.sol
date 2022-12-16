@@ -13,8 +13,8 @@ import {AaveV2Ethereum} from "@aave-address-book/AaveV2Ethereum.sol";
  */
 contract ProposalPayload {
     address public constant BENEFICIARY = 0xD20c9667bf0047F313228F9fE11F8b9F8Dc29bBa;
-    // 772,417 aUSDC vaulted upfront amount
-    uint256 public constant AUSDC_VAULT_AMOUNT = 772417e6;
+    // 600,000 aUSDC vaulted upfront amount
+    uint256 public constant AUSDC_VAULT_AMOUNT = 600000e6;
     // Have to add a small amount so that the amount divides evenly by the stream duration.
     // ```python
     // amount = AMOUNT * int(1eDECIMALS)
@@ -23,14 +23,14 @@ contract ProposalPayload {
     // exact = amount + (duration - remainder)
     // print(exact)
     // ```
-    // 9,753 AAVE, with added rounding amount
-    uint256 public constant AAVE_VESTING_AMOUNT = 9753000000000016896000; // 18 decimals
-    // 1,029,888 aUSDC, with added rounding amount
-    uint256 public constant AUSDC_VESTING_AMOUNT = 1029915648000; // 6 decimals
+    // 9,919 AAVE
+    uint256 public constant AAVE_VESTING_AMOUNT = 9919e18; // 18 decimals
+    // 800,000 aUSDC
+    uint256 public constant AUSDC_VESTING_AMOUNT = 800000e6; // 6 decimals
     uint256 public constant VESTING_DURATION = 360 days;
 
-    // December 10th 2022, 00:00:00 UTC
-    uint256 public constant AAVE_VESTING_START = 1670659200;
+    // December 31st 2022, 00:00:00 UTC
+    uint256 public constant AAVE_VESTING_START = 1672473600;
 
     address public constant AUSDC_TOKEN = 0xBcca60bB61934080951369a648Fb03DF4F96263C;
     address public constant AAVE_TOKEN = 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9;
@@ -38,6 +38,9 @@ contract ProposalPayload {
     address public constant AAVE_ECOSYSTEM_RESERVE = 0x25F2226B597E8F9514B3F68F00f494cF4f286491;
 
     function execute() external {
+        uint256 actualVestingAmountUSDC = (AUSDC_VESTING_AMOUNT / VESTING_DURATION) * VESTING_DURATION; // rounding
+        uint256 actualVestingAmountAave = (AAVE_VESTING_AMOUNT / VESTING_DURATION) * VESTING_DURATION; // rounding
+
         // aUSDC vault transfer
         IAaveEcosystemReserveController(AaveV2Ethereum.COLLECTOR_CONTROLLER).transfer(
             AaveV2Ethereum.COLLECTOR,
@@ -52,7 +55,7 @@ contract ProposalPayload {
         IAaveEcosystemReserveController(AaveV2Ethereum.COLLECTOR_CONTROLLER).createStream(
             AAVE_ECOSYSTEM_RESERVE,
             BENEFICIARY,
-            AAVE_VESTING_AMOUNT,
+            actualVestingAmountAave,
             AAVE_TOKEN,
             AAVE_VESTING_START,
             AAVE_VESTING_START + VESTING_DURATION
@@ -62,7 +65,7 @@ contract ProposalPayload {
         IAaveEcosystemReserveController(AaveV2Ethereum.COLLECTOR_CONTROLLER).createStream(
             AaveV2Ethereum.COLLECTOR,
             BENEFICIARY,
-            AUSDC_VESTING_AMOUNT,
+            actualVestingAmountUSDC,
             AUSDC_TOKEN,
             AAVE_VESTING_START,
             AAVE_VESTING_START + VESTING_DURATION

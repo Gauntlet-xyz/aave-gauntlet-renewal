@@ -21,13 +21,15 @@ contract ProposalPayloadE2ETest is Test {
     IERC20 public constant AAVE = IERC20(0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9);
 
     address public constant BENEFICIARY = 0xD20c9667bf0047F313228F9fE11F8b9F8Dc29bBa;
-    uint256 public constant AUSDC_VAULT_AMOUNT = 772417e6;
-    uint256 public constant AAVE_VESTING_AMOUNT = 9753000000000016896000; // 18 decimals
-    uint256 public constant AUSDC_VESTING_AMOUNT = 1029915648000; // 6 decimals
+
+    uint256 public constant AUSDC_VAULT_AMOUNT = 600000e6;
+    uint256 public constant AAVE_VESTING_AMOUNT = 9918999999999998208000; // rounded, 18 decimals
+    uint256 public constant AUSDC_VESTING_AMOUNT = 799994880000; // rounded, 6 decimals
+
     uint256 public constant VESTING_DURATION = 360 days;
 
-    // December 10th 2022, 00:00:00 UTC
-    uint256 public constant AAVE_VESTING_START = 1670659200;
+    // December 31st 2022, 00:00:00 UTC
+    uint256 public constant AAVE_VESTING_START = 1672473600;
 
     address public constant AAVE_ECOSYSTEM_RESERVE = 0x25F2226B597E8F9514B3F68F00f494cF4f286491;
     IStreamable public constant STREAMABLE_AAVE_ECOSYSTEM_RESERVE = IStreamable(AAVE_ECOSYSTEM_RESERVE);
