@@ -18,7 +18,7 @@ deploy-payload-dry-run :; forge script script/DeployProposalPayload.s.sol:Deploy
 verify-payload :; forge script script/DeployProposalPayload.s.sol:DeployProposalPayload --via-ir --rpc-url ${RPC_MAINNET_URL} --verify --etherscan-api-key ${ETHERSCAN_API_KEY} -vvvv
 
 # Deploy Proposal
-deploy-proposal :; forge script script/DeployMainnetProposal.s.sol:DeployProposal --via-ir --rpc-url ${RPC_MAINNET_URL} --broadcast --private-key ${PRIVATE_KEY} -vvvv
+deploy-proposal :; forge script script/DeployMainnetProposal.s.sol:DeployProposal --via-ir --rpc-url ${RPC_MAINNET_URL} -vvvv
 
 # Clean & lint
 clean    :; forge clean

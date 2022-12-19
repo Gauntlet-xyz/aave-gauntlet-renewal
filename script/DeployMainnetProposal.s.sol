@@ -3,10 +3,11 @@ pragma solidity ^0.8.15;
 
 import "@forge-std/console.sol";
 import {Script} from "@forge-std/Script.sol";
+import {Test} from "@forge-std/Test.sol";
 import {AaveGovernanceV2, IExecutorWithTimelock} from "@aave-address-book/AaveGovernanceV2.sol";
 
 library DeployMainnetProposal {
-    function _deployMainnetProposal(address payload, bytes32 ipfsHash) internal returns (uint256 proposalId) {
+    function _deployMainnetProposal(address payload, bytes32 ipfsHash) internal returns (bytes memory) {
         require(payload != address(0), "ERROR: PAYLOAD can't be address(0)");
         require(ipfsHash != bytes32(0), "ERROR: IPFS_HASH can't be bytes32(0)");
         address[] memory targets = new address[](1);
@@ -21,7 +22,8 @@ library DeployMainnetProposal {
         withDelegatecalls[0] = true;
 
         return
-            AaveGovernanceV2.GOV.create(
+            abi.encodeWithSelector(
+                AaveGovernanceV2.GOV.create.selector,
                 IExecutorWithTimelock(AaveGovernanceV2.SHORT_EXECUTOR),
                 targets,
                 values,
@@ -33,13 +35,15 @@ library DeployMainnetProposal {
     }
 }
 
-contract DeployProposal is Script {
+contract DeployProposal is Script, Test {
     function run() external {
-        vm.startBroadcast();
-        DeployMainnetProposal._deployMainnetProposal(
-            address(0), // TODO: replace with mainnet payload address
-            bytes32(0) // TODO: replace with actual ipfshash
+        address payload = 0x03232b5ee80369A88620615f8328BeEC1884b731;
+        bytes32 ipfsHash = 0x98f5bcf905c773dbb9d5336b52f8f6aea62254c092de928fd45b1a4cef5129a7;
+
+        bytes memory encodedPayload = DeployMainnetProposal._deployMainnetProposal(
+            payload,
+            ipfsHash
         );
-        vm.stopBroadcast();
+        emit log_bytes(encodedPayload);
     }
 }
