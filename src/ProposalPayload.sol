@@ -15,14 +15,6 @@ contract ProposalPayload {
     address public constant BENEFICIARY = 0xD20c9667bf0047F313228F9fE11F8b9F8Dc29bBa;
     // 600,000 aUSDC vaulted upfront amount
     uint256 public constant AUSDC_VAULT_AMOUNT = 600000e6;
-    // Have to add a small amount so that the amount divides evenly by the stream duration.
-    // ```python
-    // amount = AMOUNT * int(1eDECIMALS)
-    // duration = 360 * 24 * 60 * 60
-    // remainder = amount % duration
-    // exact = amount + (duration - remainder)
-    // print(exact)
-    // ```
     // 9,919 AAVE
     uint256 public constant AAVE_VESTING_AMOUNT = 9919e18; // 18 decimals
     // 800,000 aUSDC

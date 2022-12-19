@@ -2,18 +2,12 @@
 
 Payload and tests for the Gauntlet <> AAVE Renewal Propsal
 
-## Specification
-
-- Payload
-- Tests
-- Proposal
-
 ## Payload Specification
 
 The Proposal Payload does the following:
 
-* 30% of the total annual fee ($772,417 in USDC) will be deposited in a vault for the insolvency refund.
-* The remaining $1,029,888 in aUSDC and 9,753 AAVE tokens will be streamed linearly over 1 year from the ecosystem reserve.
+* 30% of the total annual fee ($600,000 in aUSDC) will be deposited in a vault for the insolvency refund.
+* The remaining $800,000 in aUSDC and 9,919 AAVE tokens will be streamed linearly over 1 year from the ecosystem reserve.
 
 ## Installation
 

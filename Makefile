@@ -13,11 +13,12 @@ match    :; forge clean && forge test --via-ir --etherscan-api-key ${ETHERSCAN_A
 report   :; forge clean && forge test --via-ir --gas-report | sed -e/╭/\{ -e:1 -en\;b1 -e\} -ed | cat > .gas-report
 
 # Deploy and Verify Payload
-deploy-payload :; forge script script/DeployProposalPayload.s.sol:DeployProposalPayload --rpc-url ${RPC_MAINNET_URL} --broadcast --private-key ${PRIVATE_KEY} --verify --etherscan-api-key ${ETHERSCAN_API_KEY} -vvvv
-verify-payload :; forge script script/DeployProposalPayload.s.sol:DeployProposalPayload --rpc-url ${RPC_MAINNET_URL} --verify --etherscan-api-key ${ETHERSCAN_API_KEY} -vvvv
+deploy-payload :; forge script script/DeployProposalPayload.s.sol:DeployProposalPayload --via-ir --rpc-url ${RPC_MAINNET_URL} --broadcast --private-key ${PRIVATE_KEY} --verify --etherscan-api-key ${ETHERSCAN_API_KEY} -vvvv
+deploy-payload-dry-run :; forge script script/DeployProposalPayload.s.sol:DeployProposalPayload --via-ir --rpc-url ${RPC_MAINNET_URL} --private-key ${PRIVATE_KEY} -vvvv
+verify-payload :; forge script script/DeployProposalPayload.s.sol:DeployProposalPayload --via-ir --rpc-url ${RPC_MAINNET_URL} --verify --etherscan-api-key ${ETHERSCAN_API_KEY} -vvvv
 
 # Deploy Proposal
-deploy-proposal :; forge script script/DeployMainnetProposal.s.sol:DeployProposal --rpc-url ${RPC_MAINNET_URL} --broadcast --private-key ${PRIVATE_KEY} -vvvv
+deploy-proposal :; forge script script/DeployMainnetProposal.s.sol:DeployProposal --via-ir --rpc-url ${RPC_MAINNET_URL} --broadcast --private-key ${PRIVATE_KEY} -vvvv
 
 # Clean & lint
 clean    :; forge clean
