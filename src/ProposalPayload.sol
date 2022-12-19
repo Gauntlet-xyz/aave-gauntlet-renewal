@@ -8,8 +8,8 @@ import {AaveV2Ethereum} from "@aave-address-book/AaveV2Ethereum.sol";
  * @title Gauntlet <> Aave Renewal
  * @author Paul Lei, Deepa Talwar, Jesse Kao, Jonathan Reem, Nick Cannon, Nathan Lord, Watson Fu, Sarah Chen
  * @notice Gauntlet <> Aave Renewal
- * Governance Forum Post: https://governance.aave.com/t/arc-gauntlet-aave-renewal/10516
- * Snapshot:
+ * Governance Forum Post: https://governance.aave.com/t/arc-updated-gauntlet-aave-renewal/11013
+ * Snapshot: https://snapshot.org/#/aave.eth/proposal/0xd096f98237c642614fe154844c5037a85c1f287f3323c4b003a83bd3f4ea658a
  */
 contract ProposalPayload {
     address public constant BENEFICIARY = 0xD20c9667bf0047F313228F9fE11F8b9F8Dc29bBa;
